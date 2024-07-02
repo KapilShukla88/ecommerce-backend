@@ -1,0 +1,150 @@
+import { getAWSObject, putAWSObject } from "../services/aws-service.js";
+import fs from "fs";
+import mime from "mime";
+
+const getImageType = (image) => {
+  return mime.getType(image);
+};
+
+const createProduct = async (productObject, user, { productRepository }) => {
+  const { images = [], ...body } = productObject;
+  let imagesArray = [];
+
+  // const buffer = Buffer.from(images[0].buffer, 'base64'); // Assuming base64 encoding
+  // console.log('buffer= >>', buffer)
+  for (const image of images) {
+    const fileSuffix = `image-${Date.now()}`;
+    const fileName = `${user.first_name}/${fileSuffix}-${image.url}`;
+    const awsObject = {
+      fileName: fileName,
+      contentType: image.imageType,
+      body: image.buffer,
+    };
+
+     await putAWSObject(
+      awsObject.fileName,
+      awsObject.body,
+      awsObject.contentType,
+      image.contentLength,
+    );
+
+    const imagePreSignedUrl = await getAWSObject(fileName);
+    imagesArray.push({ url: imagePreSignedUrl, alt_text: image.alt_text });
+  }
+
+  const payload = {
+    ...body,
+    images: imagesArray,
+  };
+  const productResponse = await productRepository.save(payload);
+
+  if (productResponse) {
+    return productResponse;
+  }
+
+  throw new Error("Something went wrong.");
+};
+
+const getAllProducts = async (reqQuery, { productRepository }) => {
+  let filtersQuery = {
+    is_deleted: false,
+  };
+
+  if (reqQuery.categories) {
+    filtersQuery.category = { $in: JSON.parse(reqQuery.categories) };
+  }
+
+  if (reqQuery.lowPrice || reqQuery.highPrice) {
+    filtersQuery.price = {
+      $gt: Number.parseInt(reqQuery.lowPrice) || 0,
+      $lt: Number.parseInt(reqQuery.highPrice),
+    };
+  }
+
+  if (reqQuery.brands) {
+    filtersQuery.brand = { $in: JSON.parse(reqQuery.brands) };
+  }
+  const products = await productRepository.list(filtersQuery);
+  return products;
+};
+
+const getPopularProducts = async (query, { productRepository }) => {
+  const products = await productRepository.list(query, 0, 12);
+
+  return products;
+};
+
+const deleteProduct = async (productId, { productRepository }) => {
+  const deletedProduct = await productRepository.updateOne(
+    { _id: productId },
+    { is_deleted: true }
+  );
+
+  return deletedProduct;
+};
+
+const updateProduct = async (
+  productId,
+  productObject,
+  { productRepository }
+) => {
+  const response = await productRepository.updateOne(
+    { _id: productId },
+    productObject
+  );
+
+  return response;
+};
+
+const getProduct = async (productId, { productRepository }) => {
+  const response = await productRepository.findOne({ _id: productId });
+  return response;
+};
+
+const saveProductReview = async (product, userReview) => {
+  const isReviewed = product.reviews.find((review) =>
+    review?.user?.equals(userReview.user)
+  );
+
+  if (isReviewed) {
+    isReviewed.comment = userReview.comment || "";
+    isReviewed.rating = userReview.rating;
+    isReviewed.title = userReview.title || "";
+  } else {
+    product.reviews.push(userReview);
+    product.numOfReviews = product.reviews.length;
+  }
+
+  let avg = 0;
+
+  product.reviews.forEach((review) => {
+    avg = avg + review.rating;
+  });
+
+  product.product_ratings = avg / product.reviews.length;
+
+  return await product.save();
+};
+
+const deleteProductReview = async (comingReviewId, product) => {
+  const reviewResponse = product.reviews.filter((review) =>
+    review._id.equals(comingReviewId)
+  );
+
+  product.reviews = reviewResponse;
+
+  const response = await product.save();
+
+  return response;
+};
+
+export default {
+  createProduct,
+  getAllProducts,
+  deleteProduct,
+  updateProduct,
+  getProduct,
+  saveProductReview,
+  deleteProductReview,
+  getPopularProducts,
+};
