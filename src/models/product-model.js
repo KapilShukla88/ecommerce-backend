@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
   price: {
     type: Number,
     require: [true, "Please enter product price"],
-    maxLength: [8, "Price cannot be exceed 8 characters."],
+    maxLength: [8, "The price cannot exceed eight characters."],
     default: 0,
   },
   currency: {
@@ -31,7 +31,7 @@ const productSchema = new mongoose.Schema({
   stock: {
     type: Number,
     required: [true, "Please enter product stock"],
-    maxLength: [4, "Please cannot exceed 4 character."],
+    maxLength: [4, "Stocks cannot have more than four characters."],
     default: 1,
   },
   product_ratings: {
