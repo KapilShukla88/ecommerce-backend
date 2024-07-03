@@ -26,7 +26,9 @@ export const addNewProductValidator = [
     .trim()
     .isIn(PRODUCT_CATEGORY_ENUM)
     .withMessage(
-      `The category must be one of the following:${PRODUCT_CATEGORY_ENUM.join(", ")}`
+      `The category must be one of the following:${PRODUCT_CATEGORY_ENUM.join(
+        ", "
+      )}`
     ),
   body("brand")
     .not()
@@ -65,10 +67,14 @@ export const deleteProductValidator = [
 
 export const updateProductValidator = [
   param("productId").notEmpty().withMessage("A product ID is required."),
-  body("name").optional().notEmpty().withMessage("Please provide the product name.").isString()
+  body("name")
+    .optional()
+    .notEmpty()
+    .withMessage("Please provide the product name.")
+    .isString()
     .withMessage("The name must be a string.")
     .isLength({ max: 40 })
-    .withMessage("The name must have a maximum length of 40 characters."),,
+    .withMessage("The name must have a maximum length of 40 characters."),
   body("description")
     .optional()
     .not()
@@ -82,7 +88,9 @@ export const updateProductValidator = [
     .trim()
     .isIn(PRODUCT_CATEGORY_ENUM)
     .withMessage(
-      `The category must be one of the following:${PRODUCT_CATEGORY_ENUM.join(", ")}`
+      `The category must be one of the following:${PRODUCT_CATEGORY_ENUM.join(
+        ", "
+      )}`
     ),
   body("brand")
     .optional()
