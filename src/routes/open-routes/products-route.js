@@ -17,10 +17,30 @@ const productRoute = express();
  */
 productRoute.get("/", getAllProducts);
 
+/**
+ * @description List all popular products which has rating more than 4 or equal to 4
+ * GET "v1/main/products/popular-products"
+ * Validator - optional
+ * Controller - getPopularProducts (to get the popular products)
+ */
 productRoute.get("/popular-products", getPopularProducts);
 
+/**
+ * @description get one single product by passing the product id
+ * GET "v1/main/products/:productId"
+ * Validator - optional
+ * @query productId
+ * Controller - return the single product
+ */
 productRoute.get("/:productId", getProduct);
 
+/**
+ * @description route to get the product review
+ * GET "v1/main/products/review/:productId"
+ * Validator - getReviewValidator - validate of peoductId
+ * @query productId
+ * Controller - return the product review
+ */
 productRoute.get("/review/:productId", getReviewValidator, getProductReview);
 
 export default productRoute;
