@@ -33,3 +33,5 @@ export const PRODUCT_BRAND_ENUM = [
   PRODUCT_BRAND.APPLE,
   PRODUCT_BRAND.SAMSUNG
 ];
+
+export const AWS_CDN_URL = "https://dqxo3sy8m0qh1.cloudfront.net/";
