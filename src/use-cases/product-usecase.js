@@ -1,7 +1,7 @@
 import { getAWSObject, putAWSObject } from "../services/aws-service.js";
 import fs from "fs";
 import mime from "mime";
-import {AWS_CDN_URL} from "../resources.constants.js";
+import {AWS_CDN_URL} from "../resources/constants.js";
 
 const getImageType = (image) => {
   return mime.getType(image);
