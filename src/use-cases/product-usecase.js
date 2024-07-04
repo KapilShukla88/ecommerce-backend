@@ -1,6 +1,7 @@
 import { getAWSObject, putAWSObject } from "../services/aws-service.js";
 import fs from "fs";
 import mime from "mime";
+import {AWS_CDN_URL} from "../resources.constants.js";
 
 const getImageType = (image) => {
   return mime.getType(image);
@@ -28,8 +29,7 @@ const createProduct = async (productObject, user, { productRepository }) => {
       image.contentLength,
     );
 
-    const imagePreSignedUrl = await getAWSObject(fileName);
-    imagesArray.push({ url: imagePreSignedUrl, alt_text: image.alt_text });
+    imagesArray.push({ url: AWS_CDN_URL + fileName, alt_text: image.alt_text });
   }
 
   const payload = {
