@@ -61,9 +61,7 @@ const getPopularProducts = async (req, res) => {
       productRepository,
     });
 
-    res.status(200).json({
-      data: products,
-    });
+    res.status(200).json(products);
   } catch (error) {
     res.status(500).send({
       statusCode: 500,
@@ -126,7 +124,7 @@ const getProduct = async (req, res) => {
 
 const submitReview = async (req, res) => {
   const { rating, comment, title } = req.body;
-  const productId = req.params.id;
+  const productId = req.params.productId;
   try {
     let userReview = {
       user: req.user._id,
