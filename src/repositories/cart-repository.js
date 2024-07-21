@@ -16,6 +16,12 @@ class CartRepository extends MasterRepository {
 
     return response;
   };
+
+  deleteOne = async (userId) => {
+    const response = await this.model.deleteOne({ user_id: userId });
+
+    return response;
+  };
 }
 
 export default CartRepository;

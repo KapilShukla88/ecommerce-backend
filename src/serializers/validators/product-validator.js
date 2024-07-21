@@ -132,6 +132,7 @@ export const reviewValidator = [
     .isNumeric()
     .withMessage("The rating must be a number."),
   body("title")
+    .optional()
     .notEmpty()
     .withMessage("The title field cannot be empty.")
     .isLength({ max: 30 })

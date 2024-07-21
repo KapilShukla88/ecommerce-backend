@@ -10,6 +10,14 @@ const cartRoute = express();
 
 cartRoute.get("/", apiAuthManager.auth, cartController.getAllCartItems);
 
+cartRoute.get("/cart-count", apiAuthManager.auth, cartController.getCartCount);
+
+/**
+ * route : /v1/main/cart
+ * @description this function use add product on a cart
+ * @body {productId, quantity}
+ * @returns `{message, totalCount}`
+ */
 cartRoute.post(
   "/",
   apiAuthManager.auth,
@@ -17,8 +25,14 @@ cartRoute.post(
   cartController.addToCart
 );
 
+/**
+ * route : /v1/main/cart/:productId
+ * @description this function is used to delete the cart
+ * @param productId
+ * @returns `{message, totalCount}`
+ */
 cartRoute.delete(
-  "/:cartId/:productId",
+  "/:productId",
   apiAuthManager.auth,
   deleteCartValidator,
   cartController.deleteCartItem

@@ -22,7 +22,7 @@ export const PRODUCT_BRAND = {
   SONY: "sony",
   NIKE: "nike",
   APPLE: "apple",
-  SAMSUNG: "samsung"
+  SAMSUNG: "samsung",
 };
 
 export const PRODUCT_BRAND_ENUM = [
@@ -31,7 +31,7 @@ export const PRODUCT_BRAND_ENUM = [
   PRODUCT_BRAND.SONY,
   PRODUCT_BRAND.NIKE,
   PRODUCT_BRAND.APPLE,
-  PRODUCT_BRAND.SAMSUNG
+  PRODUCT_BRAND.SAMSUNG,
 ];
 
 export const AWS_CDN_URL = "https://dqxo3sy8m0qh1.cloudfront.net/";

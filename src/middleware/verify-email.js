@@ -3,7 +3,6 @@ import userUseCase from "../use-cases/user-usecase.js";
 
 export const verifyEmail = async (req, res, next) => {
   try {
-    console.log("call...");
     const email = req.body.email;
     const userRepository = new UserRepository();
     const userResponse = await userUseCase.findEmail(email, { userRepository });

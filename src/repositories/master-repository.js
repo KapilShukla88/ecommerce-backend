@@ -66,7 +66,6 @@ class MasterRepository {
    * @returns {Promise<>}
    */
   list(query, skip, limit, projection, sortBy) {
-    console.log("product query =>>", query);
 
     return this.model
       .find(query, projection)

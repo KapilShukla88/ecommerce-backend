@@ -1,6 +1,7 @@
 import express from "express";
 import products from "./products-route.js";
 import refreshTokenRoute from "./refresh-token-route.js";
+import newsletterRoute from "./news-letter-route.js";
 
 const router = express();
 
@@ -15,5 +16,11 @@ router.use("/products", products);
   route - "/v1/main/refreshToken/*"
 */
 router.use("/refreshToken", refreshTokenRoute);
+
+/**
+ * @description to send the email notification for newsletter
+ * route - "/v1/main/newsletter"
+ */
+router.use("/newsletter", newsletterRoute);
 
 export default router;

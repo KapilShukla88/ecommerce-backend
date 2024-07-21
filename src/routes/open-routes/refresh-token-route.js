@@ -11,7 +11,7 @@ const refreshTokenRoute = express();
  * @body refresh_token
  * Controller - return the verified refresh token
  */
-refreshTokenRoute.get(
+refreshTokenRoute.post(
   "/",
   refreshTokenValidator,
   refreshTokenController.generateRefreshToken

@@ -18,6 +18,7 @@ import generateToken from "../utils/generate-token.js";
 const register = async (req, res) => {
   try {
     const body = req.body;
+
     const userRepository = new UserRepository();
 
     const userResponse = await userUseCase.findEmail(body.email, {
@@ -39,6 +40,7 @@ const register = async (req, res) => {
       .status(201)
       .send({ success: true, message: "Account created successfully." });
   } catch (error) {
+    console.log("error =>>", error);
     res.status(500).json({ statusCode: 500, message: "Something went wrong." });
   }
 };

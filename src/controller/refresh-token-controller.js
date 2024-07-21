@@ -13,7 +13,7 @@ const generateRefreshToken = async (req, res) => {
 
       res.status(201).json({
         statusCode: 201,
-        refreshToken: tokenResponse,
+        token: tokenResponse,
         message: "Refresh token created successfully.",
       });
     }

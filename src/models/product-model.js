@@ -70,7 +70,6 @@ const productSchema = new mongoose.Schema({
       title: {
         type: String,
         maxLength: 35,
-        required: true,
       },
       comment: {
         type: String,

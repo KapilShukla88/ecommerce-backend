@@ -1,7 +1,7 @@
 import { getAWSObject, putAWSObject } from "../services/aws-service.js";
 import fs from "fs";
 import mime from "mime";
-import {AWS_CDN_URL} from "../resources/constants.js";
+import { AWS_CDN_URL } from "../resources/constants.js";
 
 const getImageType = (image) => {
   return mime.getType(image);
@@ -22,11 +22,11 @@ const createProduct = async (productObject, user, { productRepository }) => {
       body: image.buffer,
     };
 
-     await putAWSObject(
+    await putAWSObject(
       awsObject.fileName,
       awsObject.body,
       awsObject.contentType,
-      image.contentLength,
+      image.contentLength
     );
 
     imagesArray.push({ url: AWS_CDN_URL + fileName, alt_text: image.alt_text });
@@ -55,10 +55,20 @@ const getAllProducts = async (reqQuery, { productRepository }) => {
   }
 
   if (reqQuery.lowPrice || reqQuery.highPrice) {
-    filtersQuery.price = {
-      $gt: Number.parseInt(reqQuery.lowPrice) || 0,
-      $lt: Number.parseInt(reqQuery.highPrice),
-    };
+    if (reqQuery.lowPrice && reqQuery.highPrice) {
+      filtersQuery.price = {
+        $gt: Number.parseInt(reqQuery.lowPrice) || 0,
+        $lt: Number.parseInt(reqQuery.highPrice) || 0,
+      };
+    } else if (reqQuery.lowPrice) {
+      filtersQuery.price = {
+        $gt: Number.parseInt(reqQuery.lowPrice) || 0,
+      };
+    } else {
+      reqQuery.price = {
+        $lt: Number.parseInt(reqQuery.highPrice) || 0,
+      };
+    }
   }
 
   if (reqQuery.brands) {
