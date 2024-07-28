@@ -5,6 +5,13 @@ import { paymentValidator } from "../../serializers/validators/payment-validator
 
 const paymentRoute = express();
 
+/**
+ * @method POST
+ * @route /v1/main/payment/process
+ * @description to get the client secret of a authenticated requested user - user have to logged in
+ * @body {amount} - amount is required - based on the amount secret key will release
+ * @returns `{success, client_secret}`
+ */
 paymentRoute.post(
   "/process",
   apiAuthManager.auth,

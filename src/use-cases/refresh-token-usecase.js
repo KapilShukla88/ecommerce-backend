@@ -1,5 +1,10 @@
 import jwt from "jsonwebtoken";
 
+/**
+ * @description to generate the access token
+ * @param {*} payload {_id, role}
+ * @returns `accesstoken`
+ */
 const generateAccessToken = async (payload) => {
   try {
     const accessToken = jwt.sign(
@@ -14,6 +19,12 @@ const generateAccessToken = async (payload) => {
   }
 };
 
+/**
+ * @description to find the refresh token
+ * @param {*} UserToken User mongodb model
+ * @param {*} refreshToken user active refreshToken
+ * @returns `{}`
+ */
 const findRefreshToken = async (UserToken, refreshToken) => {
   try {
     const response = await UserToken.findOne({ token: refreshToken });

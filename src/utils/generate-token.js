@@ -1,6 +1,12 @@
 import jwt from "jsonwebtoken";
 import UserTokenModel from "../models/user-token-model.js";
 
+/**
+ *
+ * @param {*} user {_id, email, role}
+ * @description to get the accessToken and refreshToken , access token use to expire before the refresh token
+ * @returns `Promise<{accessToken, refreshToken}>`
+ */
 const generateToken = async (user) => {
   try {
     const payload = { _id: user._id, email: user.email, role: user.role };

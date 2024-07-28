@@ -1,11 +1,5 @@
-// Model
-import User from "../models/user-model.js";
 import UserRepository from "../repositories/user-repostory.js";
-
-// Usecases
 import userUseCase from "../use-cases/user-usecase.js";
-
-// Utils
 import generateToken from "../utils/generate-token.js";
 
 /**
@@ -13,7 +7,7 @@ import generateToken from "../utils/generate-token.js";
  * @param {*} req.body.email user email
  * @param {*} res.body.firstName user first name
  * @param {*} req.body.password user password
- * @returns
+ * @returns `{statusCode, message}`
  */
 const register = async (req, res) => {
   try {
@@ -41,10 +35,15 @@ const register = async (req, res) => {
       .send({ success: true, message: "Account created successfully." });
   } catch (error) {
     console.log("error =>>", error);
-    res.status(500).json({ statusCode: 500, message: "Something went wrong." });
+    res.status(500).json({ statusCode: 500, message: "Internal Server Error" });
   }
 };
 
+/**
+ *
+ * @param {*} req {email, password}
+ * @returns `{success, data: {accessToken, refreshToken, first_name, last_name, email, avatar, role}, message}`
+ */
 const login = async (req, res) => {
   try {
     const userRepository = new UserRepository();

@@ -33,8 +33,8 @@ export const addToCart = async (req, res) => {
 
 /**
  * @description to get all the cart items
- * @param {*} req
- * @param {*} res
+ * @param {*} req {user}
+ * @returns `{....}`
  */
 const getAllCartItems = async (req, res) => {
   try {
@@ -51,6 +51,11 @@ const getAllCartItems = async (req, res) => {
   }
 };
 
+/**
+ * @description to get the total cart count of the user
+ * @param {*} req {_id}
+ * @returns `{message, total_count}`
+ */
 const getCartCount = async (req, res) => {
   try {
     const cartRepository = new CartRepository();
@@ -65,6 +70,11 @@ const getCartCount = async (req, res) => {
   } catch (error) {}
 };
 
+/**
+ * @description to delete the cart item from the user cart bucket
+ * @param {*} req {productId}
+ * @returns `{statusCode, message, total_count}`
+ */
 const deleteCartItem = async (req, res) => {
   try {
     const cartRepository = new CartRepository();

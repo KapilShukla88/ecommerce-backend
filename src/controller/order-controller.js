@@ -5,6 +5,11 @@ import {
   getMyAllOrdersUseCase,
 } from "../use-cases/order-usecase.js";
 
+/**
+ * @description to add the new order on the user bucket
+ * @param {*} req {productId}
+ * @return `{.....}`
+ */
 const addNewOrderController = async (req, res) => {
   try {
     const orderRepository = new OrderRepository();
@@ -20,7 +25,6 @@ const addNewOrderController = async (req, res) => {
 
     res.status(200).json(response);
   } catch (error) {
-    console.log("error =>>", error);
     res.status(500).send({
       statusCode: 500,
       message: "Something went wrong.Unable to delete the product.",
@@ -28,6 +32,10 @@ const addNewOrderController = async (req, res) => {
   }
 };
 
+/**
+ * @description to get all order of users
+ * @returns `{.....}`
+ */
 const getMyAllOrders = async (req, res) => {
   try {
     const orderRepository = new OrderRepository();

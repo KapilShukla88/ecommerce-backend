@@ -2,11 +2,12 @@ import productUseCase from "../use-cases/product-usecase.js";
 import ProductRepository from "../repositories/product-repository.js";
 import { productSerializer } from "../serializers/product-serializer.js";
 
+/**
+ * @description to create the new product
+ * @param {*} req {images, name, price, stock, etc.}
+ * @returns `{....}`
+ */
 const createNewProduct = async (req, res) => {
-  // console.log("product body =>>", req.body, req.files.images);
-  // res.send("Ok")
-  // return;
-
   let createProductObject = productSerializer(req.body);
   let payload = {
     ...createProductObject,
@@ -34,6 +35,11 @@ const createNewProduct = async (req, res) => {
   }
 };
 
+/**
+ * @description to get the all products listed on the website
+ * @param {*} req {query: category=[]&lowPrice, highPrice}
+ * @return `[{....}, {....}]`
+ */
 const getAllProducts = async (req, res) => {
   try {
     const productRepository = new ProductRepository();
@@ -50,7 +56,11 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-const getPopularProducts = async (req, res) => {
+/**
+ * @description to get the popular products which has rating more than or equal to 4
+ * @returns `[{...},{...}]`
+ */
+const getPopularProducts = async (_req, res) => {
   try {
     const query = {
       product_ratings: { $gte: 4 },
@@ -70,6 +80,11 @@ const getPopularProducts = async (req, res) => {
   }
 };
 
+/**
+ * @description to delete the product from the database
+ * @param {*} req {productId}
+ * @return `{statusCode, message}`
+ */
 const deleteProduct = async (req, res) => {
   try {
     const productRepository = new ProductRepository();
@@ -86,6 +101,11 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+/**
+ * @description update the product details
+ * @param {*} req {category, price, etc.}
+ * @returns `{statusCode, message}`
+ */
 const updateProduct = async (req, res) => {
   const productRequestObject = productSerializer(req.body);
   try {
@@ -105,6 +125,11 @@ const updateProduct = async (req, res) => {
   }
 };
 
+/**
+ * @description to get the single product details using the productId
+ * @param {*} req {productId}
+ * @returns `{.....}`
+ */
 const getProduct = async (req, res) => {
   try {
     const productRepository = new ProductRepository();
@@ -122,6 +147,11 @@ const getProduct = async (req, res) => {
   }
 };
 
+/**
+ * @description to add the new review on a product by using the productId
+ * @param {*} req {params: {productId}, body: {rating, comment}}
+ * @returns `{statusCode, message}`
+ */
 const submitReview = async (req, res) => {
   const { rating, comment, title } = req.body;
   const productId = req.params.productId;
@@ -165,6 +195,11 @@ const submitReview = async (req, res) => {
   }
 };
 
+/**
+ * @description get the product reviews
+ * @param {*} req {productId}
+ * @returns `{statusCode, reviews: []}`
+ */
 const getProductReview = async (req, res) => {
   try {
     const productRepository = new ProductRepository();
@@ -187,6 +222,11 @@ const getProductReview = async (req, res) => {
   }
 };
 
+/**
+ * @description to delete the product review
+ * @param {*} req {productId}
+ * @returns `{....}`
+ */
 const deleteProductReview = async (req, res) => {
   try {
     const productRepository = new ProductRepository();
@@ -198,7 +238,7 @@ const deleteProductReview = async (req, res) => {
     );
 
     const response = await productUseCase.deleteProductReview(
-      req.params.id,
+      req.params.productId,
       productResponse
     );
 

@@ -1,6 +1,11 @@
 import { sendNewsLetterUseCase } from "../use-cases/news-letter-usecase.js";
 import emailService from "../utils/sendEmail.js";
 
+/**
+ * @description to send the email to the user by using the email service
+ * @param {*} req {email} - email is required
+ * @returns `{statusCode, message}`
+ */
 const sendNewsletterEmailController = async (req, res) => {
   try {
     const options = {

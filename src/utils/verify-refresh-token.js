@@ -1,6 +1,12 @@
 import UserTokenModel from "../models/user-token-model.js";
 import jwt from "jsonwebtoken";
 
+/**
+ * 
+ * @param {*} refreshToken refresh token of the user
+ * @description verify the refresh token using refresh token private key via finding out the refresh token from the db
+ * @returns `{tokenDetail, error, message}`
+ */
 const verifyRefreshToken = (refreshToken) => {
   const privateKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;
 

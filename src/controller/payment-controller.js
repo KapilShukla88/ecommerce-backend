@@ -1,10 +1,14 @@
 import Stripe from "stripe";
 import { processPaymentUseCase } from "../use-cases/payment-usecase.js";
 
-const stripe = new Stripe(
-  "sk_test_51N7tJLSC6WMHZtvq4El8khJHGFHt1D9arNC5USQ9ZgxULJ6aa4kQWrw9vBbZCfVaO0NnocgIrYYtpt3oddIQC3Qg00p2iOM9Ly"
-);
+// stripe secret key
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+/**
+ * @description to get the client secret of the stripe payment gateway
+ * @param {*} req {amount} order amount
+ * @returns `{success, client_secret}`
+ */
 const processPayment = async (req, res) => {
   try {
     const response = await processPaymentUseCase(req.body.amount, { stripe });

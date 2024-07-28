@@ -6,6 +6,8 @@ import {
   getProduct,
   getProductReview,
 } from "../../controller/products-controller.js";
+import { searchValidator } from "../../serializers/validators/seaarch-validator.js";
+import { searchController } from "../../controller/search-controller.js";
 
 const productRoute = express();
 
@@ -42,5 +44,12 @@ productRoute.get("/:productId", getProduct);
  * Controller - return the product review
  */
 productRoute.get("/review/:productId", getReviewValidator, getProductReview);
+
+/**
+ * @description search query
+ * @validator productName - query is mandatory
+ * @route /v1/main/products/search/:productName
+ */
+productRoute.get("/search/:productName", searchValidator, searchController);
 
 export default productRoute;

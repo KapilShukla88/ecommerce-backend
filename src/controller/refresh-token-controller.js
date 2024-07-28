@@ -2,11 +2,20 @@ import UserTokenModel from "../models/user-token-model.js";
 import refreshTokenUsecase from "../use-cases/refresh-token-usecase.js";
 import verifyRefreshToken from "../utils/verify-refresh-token.js";
 
+/**
+ *
+ * @param {*} req {refresh_token}
+ * @returns `{statusCode, token}`
+ * @description to get the new access token when access token is expired
+ */
 const generateRefreshToken = async (req, res) => {
   try {
     const response = await verifyRefreshToken(req.body.refresh_token);
     if (response) {
-      const payload = { _id: response?.tokenDetail?._id, role: response?.tokenDetail?.role };
+      const payload = {
+        _id: response?.tokenDetail?._id,
+        role: response?.tokenDetail?.role,
+      };
       const tokenResponse = await refreshTokenUsecase.generateAccessToken(
         payload
       );
@@ -24,6 +33,12 @@ const generateRefreshToken = async (req, res) => {
   }
 };
 
+/**
+ *
+ * @param {*} req {refresh_token}
+ * @description to delete the refresh token
+ * @returns `{statusCode, message}`
+ */
 const deleteRefreshToken = async (req, res) => {
   try {
     const response = await refreshTokenUsecase.findRefreshToken(

@@ -1,6 +1,13 @@
 import jwt from "jsonwebtoken";
 import UserModel from "../models/user-model.js";
 
+/**
+ *
+ * @param {*} req {authorization} the access token of logged in user
+ * @param {*} res {statusCode, message} - only when authorization is not successful
+ * @param {*} next  if user pass the authenticated process then only it will move to the next request
+ * @description checking the user authorization based on the user access token if user failed the authorization process then it will throw authentication required with the status of 401
+ */
 const auth = async (req, res, next) => {
   try {
     const accessToken = req.headers["authorization"]?.replace("Bearer ", "");
@@ -23,6 +30,12 @@ const auth = async (req, res, next) => {
   }
 };
 
+/**
+ *
+ * @param  {...any} roles [admin, user]
+ * @description to check the user roles
+ * @returns `{statusCode, message}`
+ */
 const authorizerRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
