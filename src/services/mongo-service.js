@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 mongoose.set("strictQuery", true);
 
 mongoose
-  .connect("mongodb://localhost:27017/e-comm")
+  .connect(process.env.MONGODB_URL) //"mongodb://localhost:27017/e-comm"
   .then(() => console.log("Mongodb connected."))
   .catch((err) => {
     console.log("Mongodb connection error:", err);
