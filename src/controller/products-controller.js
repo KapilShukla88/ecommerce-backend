@@ -11,16 +11,27 @@ const createNewProduct = async (req, res) => {
   let createProductObject = productSerializer(req.body);
   let payload = {
     ...createProductObject,
-    images: [
-      {
-        alt_text: req.body.images,
-        url: req.files.images.name,
-        buffer: req.files.images.data,
-        contentLength: req.files.images.size,
-        imageType: req.files.images.mimetype,
-      },
-    ],
+    images: [],
   };
+  if (Array.isArray(req.files?.images)) {
+    req.files?.images.forEach((element) => {
+      payload.images.push({
+        alt_text: req.body.images,
+        url: element.name,
+        buffer: element.data,
+        contentLength: element.size,
+        imageType: element.mimetype,
+      });
+    });
+  } else {
+    payload.images.push({
+      alt_text: req.body.images,
+      url: req.files.images.name,
+      buffer: req.files.images.data,
+      contentLength: req.files.images.size,
+      imageType: req.files.images.mimetype,
+    });
+  }
   try {
     const productRepository = new ProductRepository();
     const response = await productUseCase.createProduct(payload, req.user, {
