@@ -37,6 +37,11 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+//using this mongoose virtual combine the first name and last name to userName, it will combine both first and last name
+userSchema.virtual("userName").get(function () {
+  return this.first_name + " " + this.last_name;
+});
+
 const UserModel = mongoose.model("User", userSchema);
 
 export default UserModel;

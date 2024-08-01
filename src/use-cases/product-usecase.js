@@ -1,18 +1,30 @@
-import { getAWSObject, putAWSObject } from "../services/aws-service.js";
-import fs from "fs";
-import mime from "mime";
+import { putAWSObject } from "../services/aws-service.js";
 import { AWS_CDN_URL } from "../resources/constants.js";
 
-const getImageType = (image) => {
-  return mime.getType(image);
-};
-
-const createProduct = async (productObject, user, { productRepository }) => {
+const createProduct = async (productObject, imageFiles, user, { productRepository }) => {
   const { images = [], ...body } = productObject;
-  let imagesArray = [];
 
-  // const buffer = Buffer.from(images[0].buffer, 'base64'); // Assuming base64 encoding
-  // console.log('buffer= >>', buffer)
+  if(Array.isArray(imageFiles?.images)){
+    imageFiles?.images.forEach((item) => {
+      images.push({
+        alt_text: body.images,
+        url: item.name,
+        buffer: item.data,
+        contentLength: item?.size,
+        imageType: item?.mimeType,
+      })
+    })
+  }else{
+    images.push({
+      alt_text: body.images,
+      url: imageFiles.images.name,
+      buffer: imageFiles.images.data,
+      contentLength: imageFiles.images?.size,
+      imageType: imageFiles.images?.mimeType,
+    })
+  }
+  let imagesData = [];
+
   for (const image of images) {
     const fileSuffix = `image-${Date.now()}`;
     const fileName = `${user.first_name}/${fileSuffix}-${image.url}`;
@@ -29,12 +41,12 @@ const createProduct = async (productObject, user, { productRepository }) => {
       image.contentLength
     );
 
-    imagesArray.push({ url: AWS_CDN_URL + fileName, alt_text: image.alt_text });
+    imagesData.push({ url: AWS_CDN_URL + fileName, alt_text: image.alt_text });
   }
 
   const payload = {
     ...body,
-    images: imagesArray,
+    images: imagesData,
   };
   const productResponse = await productRepository.save(payload);
 

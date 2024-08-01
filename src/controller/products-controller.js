@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import productUseCase from "../use-cases/product-usecase.js";
 import ProductRepository from "../repositories/product-repository.js";
 import { productSerializer } from "../serializers/product-serializer.js";
@@ -13,36 +14,51 @@ const createNewProduct = async (req, res) => {
     ...createProductObject,
     images: [],
   };
-  if (Array.isArray(req.files?.images)) {
-    req.files?.images.forEach((element) => {
-      payload.images.push({
-        alt_text: req.body.images,
-        url: element.name,
-        buffer: element.data,
-        contentLength: element.size,
-        imageType: element.mimetype,
-      });
-    });
-  } else {
-    payload.images.push({
-      alt_text: req.body.images,
-      url: req.files.images.name,
-      buffer: req.files.images.data,
-      contentLength: req.files.images.size,
-      imageType: req.files.images.mimetype,
-    });
-  }
+
   try {
     const productRepository = new ProductRepository();
-    const response = await productUseCase.createProduct(payload, req.user, {
-      productRepository,
-    });
+    const response = await productUseCase.createProduct(
+      payload,
+      req.files,
+      req.user,
+      {
+        productRepository,
+      }
+    );
 
     res.status(201).send(response);
   } catch (error) {
-    res
-      .status(500)
-      .send({ statusCode: 500, message: error ?? "Server error." });
+    let createProductError = {
+      status: 500,
+      message: "Internal Server Error.",
+    };
+
+    if (error instanceof mongoose.Error.ValidationError) {
+      // Handle validation error
+      createProductError = {
+        status: 401,
+        message: "Unauthorized login again",
+      };
+    } else if (error.code === 11000) {
+      createProductError = {
+        status: 11000,
+        message: "duplicate key exists",
+      };
+    } else if (error instanceof mongoose.Error.ConnectionError) {
+      // Handle connection error
+      createProductError = {
+        status: 502,
+        message: "Connection error.",
+      };
+    } else {
+      console.error("General Error:", error.message);
+      createProductError = {
+        status: 500,
+        message: "Something went wrong. Please try again later.",
+      };
+      // Handle other errors
+    }
+    res.status(500).send(createProductError);
   }
 };
 

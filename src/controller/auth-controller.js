@@ -34,7 +34,6 @@ const register = async (req, res) => {
       .status(201)
       .send({ success: true, message: "Account created successfully." });
   } catch (error) {
-    console.log("error =>>", error);
     res.status(500).json({ statusCode: 500, message: "Internal Server Error" });
   }
 };
@@ -66,7 +65,7 @@ const login = async (req, res) => {
         .status(401)
         .send({ statusCode: 401, message: "Invalid email or password." });
     }
-    const { first_name, last_name, email, avatar, role } = userResponse;
+    const { userName, email, avatar, role } = userResponse;
     const { accessToken, refreshToken } = await generateToken(userResponse);
 
     res.status(201).send({
@@ -74,8 +73,7 @@ const login = async (req, res) => {
       data: {
         accessToken,
         refreshToken,
-        first_name,
-        last_name,
+        userName,
         email,
         avatar,
         role,
