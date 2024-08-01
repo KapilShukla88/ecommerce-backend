@@ -3,8 +3,13 @@ import mongoose from "mongoose";
 
 mongoose.set("strictQuery", true);
 
+const mongodbConnectionURL =
+  process.env.NODE_ENV === "dev"
+    ? process.env.DEV_MONGODB_URL
+    : process.env.MONGODB_URL;
+
 mongoose
-  .connect(process.env.MONGODB_URL) //"mongodb://localhost:27017/e-comm"
+  .connect(mongodbConnectionURL) //"mongodb://localhost:27017/e-comm"
   .then(() => console.log("Mongodb connected."))
   .catch((err) => {
     console.log("Mongodb connection error:", err);
