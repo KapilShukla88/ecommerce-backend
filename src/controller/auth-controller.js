@@ -52,7 +52,7 @@ const login = async (req, res) => {
 
     if (!userResponse) {
       return res
-        .status(400)
+        .status(404)
         .send({ statusCode: 404, message: "Invalid email or password" });
     }
     const verifyPassword = await userUseCase.comparePassword(
@@ -65,7 +65,7 @@ const login = async (req, res) => {
         .status(401)
         .send({ statusCode: 401, message: "Invalid email or password." });
     }
-    const { userName, email, avatar, role } = userResponse;
+    const { userName, email, avatar, role, _id } = userResponse;
     const { accessToken, refreshToken } = await generateToken(userResponse);
 
     res.status(201).send({
@@ -77,6 +77,7 @@ const login = async (req, res) => {
         email,
         avatar,
         role,
+        _id
       },
       message: "Logged in successfully.",
     });

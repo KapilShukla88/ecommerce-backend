@@ -42,6 +42,14 @@ app.use("*", (_req, res) => {
 });
 
 const PORT = process.env.PORT;
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+
+// Export app without listening so that Supertest can use it.
+export const expressApp = app;
+
+// Only start the server if not in a testing environment
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}

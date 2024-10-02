@@ -3,6 +3,10 @@ import { AWS_CDN_URL } from "../resources/constants.js";
 
 const createProduct = async (productObject, imageFiles, user, { productRepository }) => {
   const { images = [], ...body } = productObject;
+  let imagesData = [];
+
+
+  if(imageFiles){
 
   if(Array.isArray(imageFiles?.images)){
     imageFiles?.images.forEach((item) => {
@@ -23,7 +27,6 @@ const createProduct = async (productObject, imageFiles, user, { productRepositor
       imageType: imageFiles.images?.mimeType,
     })
   }
-  let imagesData = [];
 
   for (const image of images) {
     const fileSuffix = `image-${Date.now()}`;
@@ -43,6 +46,8 @@ const createProduct = async (productObject, imageFiles, user, { productRepositor
 
     imagesData.push({ url: AWS_CDN_URL + fileName, alt_text: image.alt_text });
   }
+
+}
 
   const payload = {
     ...body,

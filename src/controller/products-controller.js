@@ -44,13 +44,7 @@ const createNewProduct = async (req, res) => {
         status: 11000,
         message: "duplicate key exists",
       };
-    } else if (error instanceof mongoose.Error.ConnectionError) {
-      // Handle connection error
-      createProductError = {
-        status: 502,
-        message: "Connection error.",
-      };
-    } else {
+    }else {
       console.error("General Error:", error.message);
       createProductError = {
         status: 500,
@@ -138,13 +132,14 @@ const updateProduct = async (req, res) => {
   try {
     const productRepository = new ProductRepository();
     await productUseCase.updateProduct(
-      { _id: req.params.id },
+      { _id: req.params.productId },
       productRequestObject,
       { productRepository }
     );
 
     res.status(200).json({ statusCode: 200, message: "Updated Successfully" });
   } catch (error) {
+    console.log('error =>>', error);
     res.status(500).send({
       statusCode: 500,
       message: "Something went wrong. Unable to update the product.",

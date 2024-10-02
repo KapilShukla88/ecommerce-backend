@@ -7,7 +7,6 @@ const mongodbConnectionURL =
   process.env.NODE_ENV === "dev"
     ? process.env.DEV_MONGODB_URL
     : process.env.MONGODB_URL;
-
 mongoose
   .connect(mongodbConnectionURL) //"mongodb://localhost:27017/e-comm"
   .then(() => console.log("Mongodb connected."))
